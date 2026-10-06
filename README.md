@@ -111,8 +111,8 @@ agentic-eval/
 │   │   └── rubric.py                 # llm_rubric (uses the judge)
 │   ├── judges/
 │   │   └── deepeval_judge.py         # ConversationalGEval, provider swappable; static judge for tests
-│   ├── reporting/writers.py          # run.json, report.md, console
-│   └── cli.py                        # agentic-eval run | validate | trace | plugins
+│   ├── reporting/                    # report.html (html.py), run.json, report.md, console (writers.py)
+│   └── cli.py                        # agentic-eval run | validate | trace | report | plugins
 ├── applications/                     # one folder per system under test (plugins, not core)
 │   ├── _template/                    # copy this to add an application
 │   └── openai_cs_agents_demo/
@@ -297,8 +297,16 @@ Replay checks that each scripted message matches the recorded one, so an edited 
 
 Each run writes `reports/<app>_<timestamp>_<run_id>/` with:
 
+- `report.html`: the interactive report (see below);
 - `run.json`: everything, including every trace and metric detail (`--keep-raw` adds raw responses);
 - `report.md`: readable summary, metric pass rates, per-case tables, agent path and tool calls.
+
+**HTML report.** A single self-contained file: no CDN, fonts or network access, so it opens offline and behind corporate proxies, and can be attached to an email or a ticket. It shows the run verdict and exit code, summary cards, metric pass rates (deterministic vs LLM judge), a case × metric matrix of scores, and per case the metric table, the judge audit (criteria, steps used, reason), the full conversation (user turns, handoffs including rejected ones, hooks, tool calls with arguments, tool results, state changes, guardrails, agent messages, per-turn latency) and the final state. Filter by status or tag and search across ids, descriptions and reasons. Light and dark mode follow the system setting. Application and model text is always rendered as plain text.
+
+```bash
+agentic-eval run applications/openai_cs_agents_demo --replay applications/openai_cs_agents_demo/fixtures --open
+agentic-eval report reports/<run-folder> --open      # rebuild report.html / report.md from an existing run.json
+```
 
 | Exit code | Meaning |
 |---|---|
@@ -332,7 +340,7 @@ Metric statuses are `passed`, `failed`, `not_applicable` (the adapter can't obse
 ## Development
 
 ```bash
-pytest                 # 39 tests, offline, no API keys
+pytest                 # 43 tests, offline, no API keys
 pytest --cov=agentic_eval
 ```
 

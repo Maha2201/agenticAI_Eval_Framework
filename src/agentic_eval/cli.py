@@ -3,6 +3,7 @@
     agentic-eval run       APP [--cases PATH] [--record DIR | --replay DIR] [--no-judge] ...
     agentic-eval validate  APP [--cases PATH]
     agentic-eval trace     APP --case ID --replay DIR
+    agentic-eval report    RUN_DIR_OR_RUN_JSON [--open]
     agentic-eval plugins
 
 APP is an application folder (containing app.yaml) or the app.yaml path.
@@ -22,7 +23,14 @@ from agentic_eval.core import registry
 from agentic_eval.core.config import load_application
 from agentic_eval.core.runner import RunOptions, Runner
 from agentic_eval.core.testcase import load_test_cases
-from agentic_eval.reporting import console_line, console_summary, write_json, write_markdown
+from agentic_eval.core.results import RunResult
+from agentic_eval.reporting import (
+    console_line,
+    console_summary,
+    write_html,
+    write_json,
+    write_markdown,
+)
 
 
 def _load_dotenv() -> None:
@@ -70,9 +78,37 @@ def cmd_run(args: argparse.Namespace) -> int:
     out = Path(args.out) / f"{app.name}_{datetime.now():%Y%m%d_%H%M%S}_{run.run_id}"
     write_json(run, out / "run.json")
     write_markdown(run, out / "report.md")
+    html = write_html(run, out / "report.html")
     print(console_summary(run))
     print(f"Reports: {out}")
+    print(f"Open:    {html.resolve()}")
+    if args.open:
+        _open_in_browser(html)
     return run.exit_code
+
+
+def _open_in_browser(path: Path) -> None:
+    import webbrowser
+
+    webbrowser.open(path.resolve().as_uri())
+
+
+def cmd_report(args: argparse.Namespace) -> int:
+    """Rebuild report.md and report.html from an existing run.json."""
+    src = Path(args.run)
+    run_json = src / "run.json" if src.is_dir() else src
+    if not run_json.exists():
+        raise SystemExit(f"No run.json at {run_json}")
+    run = RunResult.model_validate_json(run_json.read_text(encoding="utf-8"))
+    run.summarise()
+    out = run_json.parent
+    write_markdown(run, out / "report.md")
+    html = write_html(run, out / "report.html")
+    print(f"Rebuilt reports in {out}")
+    print(f"Open:    {html.resolve()}")
+    if args.open:
+        _open_in_browser(html)
+    return 0
 
 
 def cmd_validate(args: argparse.Namespace) -> int:
@@ -130,7 +166,13 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--case", action="append", help="only this case id (repeatable)")
     r.add_argument("--out", default="reports")
     r.add_argument("--keep-raw", action="store_true", help="include raw responses in run.json")
+    r.add_argument("--open", action="store_true", help="open report.html in the browser when done")
     r.set_defaults(func=cmd_run)
+
+    rp = sub.add_parser("report", help="rebuild report.html / report.md from a run.json")
+    rp.add_argument("run", help="a run folder under reports/, or its run.json")
+    rp.add_argument("--open", action="store_true", help="open report.html in the browser")
+    rp.set_defaults(func=cmd_report)
 
     v = sub.add_parser("validate", help="check config, plugins and test cases load")
     v.add_argument("app")
