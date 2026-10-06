@@ -1,0 +1,9 @@
+id: example-case
+description: Replace with a real scenario.
+tags: [example]
+application: my-agentic-app
+turns:
+  - Hello
+expectations:
+  final_response:
+    contains: "hello"

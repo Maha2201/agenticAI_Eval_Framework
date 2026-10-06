@@ -1,0 +1,118 @@
+{
+  "request": {
+    "message": "Write me a poem about strawberries",
+    "session_id": "ad6b2bb2dae143b495de368f278929cf"
+  },
+  "payload": {
+    "conversation_id": "ad6b2bb2dae143b495de368f278929cf",
+    "current_agent": "Triage Agent",
+    "messages": [
+      {
+        "content": "Sorry, I can only answer questions related to airline travel.",
+        "agent": "Triage Agent"
+      }
+    ],
+    "events": [],
+    "context": {
+      "passenger_name": null,
+      "confirmation_number": null,
+      "seat_number": null,
+      "flight_number": null,
+      "account_number": "38477536"
+    },
+    "agents": [
+      {
+        "name": "Triage Agent",
+        "description": "A triage agent that can delegate a customer's request to the appropriate agent.",
+        "handoffs": [
+          "Flight Status Agent",
+          "Cancellation Agent",
+          "FAQ Agent",
+          "Seat Booking Agent"
+        ],
+        "tools": [],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "FAQ Agent",
+        "description": "A helpful agent that can answer questions about the airline.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "faq_lookup_tool"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Seat Booking Agent",
+        "description": "A helpful agent that can update a seat on a flight.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "update_seat",
+          "display_seat_map"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Flight Status Agent",
+        "description": "An agent to provide flight status information.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "flight_status_tool"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Cancellation Agent",
+        "description": "An agent to cancel flights.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "cancel_flight"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      }
+    ],
+    "guardrails": [
+      {
+        "id": "7de25dce78eb4807b1462482f6b289d3",
+        "name": "Relevance Guardrail",
+        "input": "Write me a poem about strawberries",
+        "reasoning": "The message is asking for a poem about strawberries, which is unrelated to any typical customer service topic for an airline, such as flights or bookings.",
+        "passed": false,
+        "timestamp": 1791200009245.3586
+      },
+      {
+        "id": "2412f69ed52e405db537bf23ea688725",
+        "name": "Jailbreak Guardrail",
+        "input": "Write me a poem about strawberries",
+        "reasoning": "",
+        "passed": true,
+        "timestamp": 1791200009245.3586
+      }
+    ]
+  },
+  "status_code": 200,
+  "latency_ms": 1196.9582000001537
+}

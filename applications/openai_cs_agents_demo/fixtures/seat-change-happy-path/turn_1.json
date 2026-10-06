@@ -1,0 +1,162 @@
+{
+  "request": {
+    "message": "Change it to 23A",
+    "session_id": "bc5f9744a1e244019d84264705082e2f"
+  },
+  "payload": {
+    "conversation_id": "bc5f9744a1e244019d84264705082e2f",
+    "current_agent": "Seat Booking Agent",
+    "messages": [
+      {
+        "content": "Your seat has been successfully changed to 23A. If there's anything else you need, feel free to ask!",
+        "agent": "Seat Booking Agent"
+      }
+    ],
+    "events": [
+      {
+        "id": "a59c8a0aee9a4ceb930fed602da6889c",
+        "type": "tool_call",
+        "agent": "Seat Booking Agent",
+        "content": "update_seat",
+        "metadata": {
+          "tool_args": {
+            "confirmation_number": "USTA82",
+            "new_seat": "23A"
+          }
+        },
+        "timestamp": null
+      },
+      {
+        "id": "1c15bcbd4c144070a2389fa0f2836441",
+        "type": "tool_output",
+        "agent": "Seat Booking Agent",
+        "content": "Updated seat to 23A for confirmation number USTA82",
+        "metadata": {
+          "tool_result": "Updated seat to 23A for confirmation number USTA82"
+        },
+        "timestamp": null
+      },
+      {
+        "id": "62ea874f3010452a8ba87eeda79ef68d",
+        "type": "message",
+        "agent": "Seat Booking Agent",
+        "content": "Your seat has been successfully changed to 23A. If there's anything else you need, feel free to ask!",
+        "metadata": null,
+        "timestamp": null
+      },
+      {
+        "id": "6f50d40574f74c19b653ff8a5ed51d5c",
+        "type": "context_update",
+        "agent": "Seat Booking Agent",
+        "content": "",
+        "metadata": {
+          "changes": {
+            "seat_number": "23A"
+          }
+        },
+        "timestamp": null
+      }
+    ],
+    "context": {
+      "passenger_name": null,
+      "confirmation_number": "USTA82",
+      "seat_number": "23A",
+      "flight_number": "FLT-941",
+      "account_number": "22045707"
+    },
+    "agents": [
+      {
+        "name": "Triage Agent",
+        "description": "A triage agent that can delegate a customer's request to the appropriate agent.",
+        "handoffs": [
+          "Flight Status Agent",
+          "Cancellation Agent",
+          "FAQ Agent",
+          "Seat Booking Agent"
+        ],
+        "tools": [],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "FAQ Agent",
+        "description": "A helpful agent that can answer questions about the airline.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "faq_lookup_tool"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Seat Booking Agent",
+        "description": "A helpful agent that can update a seat on a flight.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "update_seat",
+          "display_seat_map"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Flight Status Agent",
+        "description": "An agent to provide flight status information.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "flight_status_tool"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Cancellation Agent",
+        "description": "An agent to cancel flights.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "cancel_flight"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      }
+    ],
+    "guardrails": [
+      {
+        "id": "63f66b42635c4705b5e586eca2567b9c",
+        "name": "Relevance Guardrail",
+        "input": "Change it to 23A",
+        "reasoning": "",
+        "passed": true,
+        "timestamp": 1791200018177.4502
+      },
+      {
+        "id": "d67111742a0143c18fab5c93a3f9db8c",
+        "name": "Jailbreak Guardrail",
+        "input": "Change it to 23A",
+        "reasoning": "",
+        "passed": true,
+        "timestamp": 1791200018177.4573
+      }
+    ]
+  },
+  "status_code": 200,
+  "latency_ms": 2779.043399999864
+}

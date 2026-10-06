@@ -1,0 +1,51 @@
+# Application config: openai/openai-cs-agents-demo (airline customer service, 5 agents)
+# Pinned commit 46cc386 (Aug 2025), plain /chat JSON API, models patched to gpt-4o / gpt-4o-mini.
+# This file + adapter.py is everything the framework knows about this application.
+
+name: openai-cs-agents-demo
+description: OpenAI Agents SDK airline customer service demo (Triage, Seat Booking, Flight Status, Cancellation, FAQ)
+version: "46cc386"
+
+connector:
+  plugin: http
+  options:
+    base_url: ${AIRLINE_DEMO_URL:-http://127.0.0.1:8000}
+    path: /chat
+    method: POST
+    body:
+      conversation_id: "{{session_id}}"   # null on the first turn; the app creates one
+      message: "{{message}}"
+    session_id_path: conversation_id
+    timeout_s: 90
+    verify_ssl: true
+    ca_bundle: ${AGENTIC_EVAL_CA_BUNDLE:-}
+    retries: 1
+
+adapter:
+  plugin: adapter.py:OpenAICSAgentsDemoAdapter
+  options: {}          # defaults: hook pattern ^on_.+_handoff$, rejected-handoff marker, DISPLAY_SEAT_MAP signal
+
+judge:
+  plugin: deepeval
+  options:
+    provider: openai
+    model: gpt-4o
+    temperature: 0
+
+entry_agent: Triage Agent
+
+# Facts generic metrics need. 'write' tools change the world and should need approval.
+tools:
+  update_seat:        {side_effect: write}
+  cancel_flight:      {side_effect: write}
+  flight_status_tool: {side_effect: read}
+  faq_lookup_tool:    {side_effect: read}
+  display_seat_map:   {side_effect: ui}
+
+# Run on every case, with or without expectations.
+default_metrics:
+  - tool_scope              # every call/handoff within the agent's manifest
+  - rejected_handoffs       # no refused handoffs
+  - approval_before_write   # n/a here: this app has no structured approvals (see README)
+
+testcases: testcases

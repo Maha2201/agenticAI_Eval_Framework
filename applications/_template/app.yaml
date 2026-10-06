@@ -1,0 +1,36 @@
+# Copy this folder to applications/<your_app>/ and fill it in.
+# Supporting a new application = this file + adapter.py + test cases. No core changes.
+
+name: my-agentic-app
+description: What the app is and which version you test
+version: "<git commit or release>"
+
+connector:
+  plugin: http                    # or replay, or a custom 'connector.py:MyConnector'
+  options:
+    base_url: ${MY_APP_URL:-http://127.0.0.1:8000}
+    path: /chat
+    method: POST
+    headers: {}
+    body:
+      session_id: "{{session_id}}"
+      input: "{{message}}"
+    session_id_path: session_id
+    timeout_s: 60
+
+adapter:
+  plugin: adapter.py:MyAppAdapter
+  options: {}
+
+judge:
+  plugin: deepeval
+  options: {provider: openai, model: gpt-4o, temperature: 0}
+
+entry_agent: null                 # name of the first agent, if the app has one
+
+tools: {}                         # tool_name: {side_effect: read|write|ui}
+
+default_metrics:
+  - tool_scope
+
+testcases: testcases

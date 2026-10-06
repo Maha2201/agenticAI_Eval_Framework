@@ -1,0 +1,14 @@
+id: multi-intent-routing
+description: >
+  Two intents in one message. Known behaviour from exploration: Triage tries
+  two simultaneous handoffs and the SDK rejects the second. This case is
+  expected to FAIL on rejected_handoffs until the app handles multi-intent routing.
+tags: [routing, multi-intent, known-issue]
+turns:
+  - I want to change my seat and also check my flight status
+expectations:
+  agent_path:
+    sequence: [Triage Agent, Seat Booking Agent]
+    mode: subsequence
+  handoffs:
+    max_rejected: 0

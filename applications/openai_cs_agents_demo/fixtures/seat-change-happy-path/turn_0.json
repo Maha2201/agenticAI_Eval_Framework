@@ -1,0 +1,159 @@
+{
+  "request": {
+    "message": "Can I change my seat?",
+    "session_id": "bc5f9744a1e244019d84264705082e2f"
+  },
+  "payload": {
+    "conversation_id": "bc5f9744a1e244019d84264705082e2f",
+    "current_agent": "Seat Booking Agent",
+    "messages": [
+      {
+        "content": "Sure! I can assist you with that. I have your confirmation number as USTA82. Can you please tell me your desired seat number, or would you like to see an interactive seat map to choose your seat?",
+        "agent": "Seat Booking Agent"
+      }
+    ],
+    "events": [
+      {
+        "id": "4e3fb474e4d7493eb8f7cd212c5e5dd8",
+        "type": "handoff",
+        "agent": "Triage Agent",
+        "content": "Triage Agent -> Seat Booking Agent",
+        "metadata": {
+          "source_agent": "Triage Agent",
+          "target_agent": "Seat Booking Agent"
+        },
+        "timestamp": null
+      },
+      {
+        "id": "c4c1da395dab4bafae62923ecd53b3e7",
+        "type": "tool_call",
+        "agent": "Seat Booking Agent",
+        "content": "on_seat_booking_handoff",
+        "metadata": null,
+        "timestamp": null
+      },
+      {
+        "id": "522e0bd4dcc0475db2d185eddb8f9a78",
+        "type": "message",
+        "agent": "Seat Booking Agent",
+        "content": "Sure! I can assist you with that. I have your confirmation number as USTA82. Can you please tell me your desired seat number, or would you like to see an interactive seat map to choose your seat?",
+        "metadata": null,
+        "timestamp": null
+      },
+      {
+        "id": "acba20809c2e4a7a82c50b588b38c153",
+        "type": "context_update",
+        "agent": "Seat Booking Agent",
+        "content": "",
+        "metadata": {
+          "changes": {
+            "confirmation_number": "USTA82",
+            "flight_number": "FLT-941"
+          }
+        },
+        "timestamp": null
+      }
+    ],
+    "context": {
+      "passenger_name": null,
+      "confirmation_number": "USTA82",
+      "seat_number": null,
+      "flight_number": "FLT-941",
+      "account_number": "22045707"
+    },
+    "agents": [
+      {
+        "name": "Triage Agent",
+        "description": "A triage agent that can delegate a customer's request to the appropriate agent.",
+        "handoffs": [
+          "Flight Status Agent",
+          "Cancellation Agent",
+          "FAQ Agent",
+          "Seat Booking Agent"
+        ],
+        "tools": [],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "FAQ Agent",
+        "description": "A helpful agent that can answer questions about the airline.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "faq_lookup_tool"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Seat Booking Agent",
+        "description": "A helpful agent that can update a seat on a flight.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "update_seat",
+          "display_seat_map"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Flight Status Agent",
+        "description": "An agent to provide flight status information.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "flight_status_tool"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Cancellation Agent",
+        "description": "An agent to cancel flights.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "cancel_flight"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      }
+    ],
+    "guardrails": [
+      {
+        "id": "ba58c6f9f12044d18db9c25917c95cd9",
+        "name": "Relevance Guardrail",
+        "input": "Can I change my seat?",
+        "reasoning": "",
+        "passed": true,
+        "timestamp": 1791200015391.5295
+      },
+      {
+        "id": "b4135e810ad64dee83a59ffbafc5fdc2",
+        "name": "Jailbreak Guardrail",
+        "input": "Can I change my seat?",
+        "reasoning": "",
+        "passed": true,
+        "timestamp": 1791200015391.5378
+      }
+    ]
+  },
+  "status_code": 200,
+  "latency_ms": 2834.131300000081
+}

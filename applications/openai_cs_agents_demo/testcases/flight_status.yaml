@@ -1,0 +1,20 @@
+id: flight-status-read-only
+description: A read-only lookup routes to Flight Status, calls only the status tool and changes nothing.
+tags: [flight-status, read, smoke]
+vars:
+  flight: FLT-123
+turns:
+  - "What's the status of flight {{ vars.flight }}?"
+expectations:
+  agent_path:
+    sequence: [Triage Agent, Flight Status Agent]
+    mode: exact
+  tool_calls:
+    expected:
+      - tool: flight_status_tool
+        arguments:
+          flight_number: "{{ vars.flight }}"
+    forbidden: [update_seat, cancel_flight]
+    allow_unexpected: false
+  final_response:
+    contains: "{{ vars.flight }}"

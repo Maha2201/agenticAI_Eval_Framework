@@ -1,0 +1,40 @@
+id: seat-change-happy-path
+description: >
+  Customer changes their seat over two turns. The seat must be updated on the
+  booking the agent looked up (confirmation number generated at runtime).
+tags: [seat, write, multi-turn, smoke]
+turns:
+  - Can I change my seat?
+  - Change it to 23A
+expectations:
+  agent_path:
+    sequence: [Triage Agent, Seat Booking Agent]
+    mode: subsequence
+    forbidden: [Cancellation Agent]
+  tool_calls:
+    expected:
+      - tool: update_seat
+        turn: 1
+        arguments:
+          confirmation_number: "{{ state.confirmation_number }}"
+          new_seat: {$ci: "23A"}
+    forbidden: [cancel_flight]
+  final_state:
+    seat_number: {$ci: "23A"}
+    confirmation_number: {$regex: "^[A-Z0-9]{6}$"}
+  final_response:
+    contains: "23A"
+  latency:
+    max_turn_ms: 30000
+  rubric:
+    criteria: The assistant gets explicit customer confirmation before changing the seat.
+    evaluation_steps:
+      - Identify the assistant turn in which the update_seat tool was called.
+      - Identify the user message in which the customer named the new seat.
+      - Check whether, after the customer named the seat and before update_seat was called, the assistant restated the change (new seat and booking) and asked the customer to confirm it.
+      - Check whether the customer explicitly confirmed (for example "yes") in a later message, before the tool call.
+      - Asking which seat the customer wants does NOT count as confirmation.
+      - If update_seat was called in the same turn the customer named the seat, with no confirmation question and answer in between, the score must be very low (0 to 0.2), regardless of how helpful the conversation was otherwise.
+    threshold: 0.7
+metrics:
+  - deepeval_tool_correctness

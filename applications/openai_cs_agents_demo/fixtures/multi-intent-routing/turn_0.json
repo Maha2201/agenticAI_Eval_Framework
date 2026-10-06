@@ -1,0 +1,169 @@
+{
+  "request": {
+    "message": "I want to change my seat and also check my flight status",
+    "session_id": "6b513648e17648a9af759fccb64fb8ff"
+  },
+  "payload": {
+    "conversation_id": "6b513648e17648a9af759fccb64fb8ff",
+    "current_agent": "Seat Booking Agent",
+    "messages": [
+      {
+        "content": "Hi there! Let's start with changing your seat.\n\nI've got your confirmation number as **MV2LKK**. Could you please let me know your desired seat number? If you're unsure, I can display an interactive seat map for you.",
+        "agent": "Seat Booking Agent"
+      }
+    ],
+    "events": [
+      {
+        "id": "d708f97eeaf24bcb9e799b0cb2e2cf59",
+        "type": "tool_output",
+        "agent": "Triage Agent",
+        "content": "Multiple handoffs detected, ignoring this one.",
+        "metadata": {
+          "tool_result": "Multiple handoffs detected, ignoring this one."
+        },
+        "timestamp": null
+      },
+      {
+        "id": "5c9efb365259462b95d04184a76169b9",
+        "type": "handoff",
+        "agent": "Triage Agent",
+        "content": "Triage Agent -> Seat Booking Agent",
+        "metadata": {
+          "source_agent": "Triage Agent",
+          "target_agent": "Seat Booking Agent"
+        },
+        "timestamp": null
+      },
+      {
+        "id": "df1fe1f35ca44a7998b8d5367aced401",
+        "type": "tool_call",
+        "agent": "Seat Booking Agent",
+        "content": "on_seat_booking_handoff",
+        "metadata": null,
+        "timestamp": null
+      },
+      {
+        "id": "ef22aedb0cb54980876896808ffaac84",
+        "type": "message",
+        "agent": "Seat Booking Agent",
+        "content": "Hi there! Let's start with changing your seat.\n\nI've got your confirmation number as **MV2LKK**. Could you please let me know your desired seat number? If you're unsure, I can display an interactive seat map for you.",
+        "metadata": null,
+        "timestamp": null
+      },
+      {
+        "id": "83c41fe9c86949f1b2f1b2e870154c9b",
+        "type": "context_update",
+        "agent": "Seat Booking Agent",
+        "content": "",
+        "metadata": {
+          "changes": {
+            "confirmation_number": "MV2LKK",
+            "flight_number": "FLT-562"
+          }
+        },
+        "timestamp": null
+      }
+    ],
+    "context": {
+      "passenger_name": null,
+      "confirmation_number": "MV2LKK",
+      "seat_number": null,
+      "flight_number": "FLT-562",
+      "account_number": "10068885"
+    },
+    "agents": [
+      {
+        "name": "Triage Agent",
+        "description": "A triage agent that can delegate a customer's request to the appropriate agent.",
+        "handoffs": [
+          "Flight Status Agent",
+          "Cancellation Agent",
+          "FAQ Agent",
+          "Seat Booking Agent"
+        ],
+        "tools": [],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "FAQ Agent",
+        "description": "A helpful agent that can answer questions about the airline.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "faq_lookup_tool"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Seat Booking Agent",
+        "description": "A helpful agent that can update a seat on a flight.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "update_seat",
+          "display_seat_map"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Flight Status Agent",
+        "description": "An agent to provide flight status information.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "flight_status_tool"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Cancellation Agent",
+        "description": "An agent to cancel flights.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "cancel_flight"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      }
+    ],
+    "guardrails": [
+      {
+        "id": "9d3513e2275e4e529aa9d78dae5c9b1f",
+        "name": "Relevance Guardrail",
+        "input": "I want to change my seat and also check my flight status",
+        "reasoning": "",
+        "passed": true,
+        "timestamp": 1791200012549.273
+      },
+      {
+        "id": "8c57921b909c4601a1b58c2c4e005dfc",
+        "name": "Jailbreak Guardrail",
+        "input": "I want to change my seat and also check my flight status",
+        "reasoning": "",
+        "passed": true,
+        "timestamp": 1791200012549.28
+      }
+    ]
+  },
+  "status_code": 200,
+  "latency_ms": 3296.856499999194
+}

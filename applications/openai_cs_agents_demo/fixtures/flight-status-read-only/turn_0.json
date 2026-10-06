@@ -1,0 +1,160 @@
+{
+  "request": {
+    "message": "What's the status of flight FLT-123?",
+    "session_id": "5c631d856f214a9e898caa750b18e632"
+  },
+  "payload": {
+    "conversation_id": "5c631d856f214a9e898caa750b18e632",
+    "current_agent": "Flight Status Agent",
+    "messages": [
+      {
+        "content": "Flight FLT-123 is on time and scheduled to depart at gate A10.",
+        "agent": "Flight Status Agent"
+      }
+    ],
+    "events": [
+      {
+        "id": "9d56ae8059174d349b25b6023f131127",
+        "type": "handoff",
+        "agent": "Triage Agent",
+        "content": "Triage Agent -> Flight Status Agent",
+        "metadata": {
+          "source_agent": "Triage Agent",
+          "target_agent": "Flight Status Agent"
+        },
+        "timestamp": null
+      },
+      {
+        "id": "184ff09e820d4f41b3158dd147bb7284",
+        "type": "tool_call",
+        "agent": "Flight Status Agent",
+        "content": "flight_status_tool",
+        "metadata": {
+          "tool_args": {
+            "flight_number": "FLT-123"
+          }
+        },
+        "timestamp": null
+      },
+      {
+        "id": "e449c48a99c4477f86b87719816742fb",
+        "type": "tool_output",
+        "agent": "Flight Status Agent",
+        "content": "Flight FLT-123 is on time and scheduled to depart at gate A10.",
+        "metadata": {
+          "tool_result": "Flight FLT-123 is on time and scheduled to depart at gate A10."
+        },
+        "timestamp": null
+      },
+      {
+        "id": "0c4fb23ff9c641beb828dcbbe1b8bd26",
+        "type": "message",
+        "agent": "Flight Status Agent",
+        "content": "Flight FLT-123 is on time and scheduled to depart at gate A10.",
+        "metadata": null,
+        "timestamp": null
+      }
+    ],
+    "context": {
+      "passenger_name": null,
+      "confirmation_number": null,
+      "seat_number": null,
+      "flight_number": null,
+      "account_number": "15059862"
+    },
+    "agents": [
+      {
+        "name": "Triage Agent",
+        "description": "A triage agent that can delegate a customer's request to the appropriate agent.",
+        "handoffs": [
+          "Flight Status Agent",
+          "Cancellation Agent",
+          "FAQ Agent",
+          "Seat Booking Agent"
+        ],
+        "tools": [],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "FAQ Agent",
+        "description": "A helpful agent that can answer questions about the airline.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "faq_lookup_tool"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Seat Booking Agent",
+        "description": "A helpful agent that can update a seat on a flight.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "update_seat",
+          "display_seat_map"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Flight Status Agent",
+        "description": "An agent to provide flight status information.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "flight_status_tool"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      },
+      {
+        "name": "Cancellation Agent",
+        "description": "An agent to cancel flights.",
+        "handoffs": [
+          "Triage Agent"
+        ],
+        "tools": [
+          "cancel_flight"
+        ],
+        "input_guardrails": [
+          "Relevance Guardrail",
+          "Jailbreak Guardrail"
+        ]
+      }
+    ],
+    "guardrails": [
+      {
+        "id": "10ebd656baee446d914eb6ec35789f0a",
+        "name": "Relevance Guardrail",
+        "input": "What's the status of flight FLT-123?",
+        "reasoning": "",
+        "passed": true,
+        "timestamp": 1791200008029.4043
+      },
+      {
+        "id": "5dd1324dc9db4c7ebd37c0b4ffa75c6a",
+        "name": "Jailbreak Guardrail",
+        "input": "What's the status of flight FLT-123?",
+        "reasoning": "",
+        "passed": true,
+        "timestamp": 1791200008029.4226
+      }
+    ]
+  },
+  "status_code": 200,
+  "latency_ms": 7128.51050000063
+}
